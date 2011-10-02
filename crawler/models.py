@@ -7,3 +7,11 @@ class Address(models.Model):
     state = models.CharField(max_length=30)
     zip_code = models.CharField(max_length=10)
     city = models.CharField(max_length=30)
+
+class Contact(Address):
+    name = models.CharField(max_length=30)
+    phone = models.CharField(max_length=30)
+    mobile = models.CharField(max_length=30)
+    fax = models.CharField(max_length=30)
+    web = models.CharField(max_length=100)
+    mail = models.EmailField()
