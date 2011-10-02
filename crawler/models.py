@@ -1,4 +1,5 @@
 from django.db import models
+import expose_parser
 
 class Address(models.Model):
     street = models.CharField(max_length=20)
@@ -15,3 +16,26 @@ class Contact(Address):
     fax = models.CharField(max_length=30)
     web = models.CharField(max_length=100)
     mail = models.EmailField()
+
+class Expose(models.Model):
+    title = models.CharField(max_length=200)
+    expose_link = models.CharField(max_length=100, primary_key=True)
+    address = models.ForeignKey(Address, blank=True)
+    contact = models.ForeignKey(Contact, related_name='offered_expose_set', blank=True)
+    cold_rent = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    additional_charges = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    operation_expenses = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    heating_cost = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    total_rent = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    heating_type = models.CharField(max_length=20, blank=True)
+    object_state = models.CharField(max_length=30, blank=True)
+    security = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    commission = models.CharField(max_length=30, blank=True)
+    space = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+    floor = models.IntegerField(blank=True)
+    flat_type = models.CharField(max_length=30, blank=True)
+    rooms = models.DecimalField(max_digits=4, decimal_places=2, blank=True)
+    year = models.IntegerField(blank=True)
+    availability = models.CharField(max_length=30, blank=True)
+    last_modified = models.DateField(auto_now=True, blank=True)
+    
