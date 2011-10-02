@@ -3,7 +3,7 @@ import lxml.html
 
 from pyquery import PyQuery
 
-class ExposeParser():
+class ExposeParser:
     def _get_title(self):
         return self.pyquery('title').text()
     
