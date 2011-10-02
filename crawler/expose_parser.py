@@ -1,16 +1,19 @@
 import re
+import lxml.html
+
+from pyquery import PyQuery
 
 class ExposeParser():
-    def get_title(self):
+    def _get_title(self):
         return self.pyquery('title').text()
     
     def __getattr__(self, attr):
-        if re.match('[a-zA-Z_][a-zA-Z0-9_]*'):
-            return eval('_get_%s()' % attr)
+        if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
+            return eval('self._get_%s()' % attr)
         else:
             raise ValueError('Attribute names must be valid identifiers.')
     
-    def __init__():
+    def __init__(self, expose_link):
         self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
 
 class ImmonetExposeParser(ExposeParser):

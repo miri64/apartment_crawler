@@ -41,7 +41,7 @@ class Expose(models.Model):
     
     def __init__(self,expose_link):
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
-        models.Model(
+        super(Expose,self).__init__(
             title = parser.title,
             expose_link = expose_link,
         )
