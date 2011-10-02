@@ -4,6 +4,9 @@ import lxml.html
 from pyquery import PyQuery
 
 class ExposeParser:
+    def __init__(self, expose_link):
+        self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
+    
     def _get_title(self):
         return self.pyquery('title').text()
     
@@ -12,9 +15,6 @@ class ExposeParser:
             return eval('self._get_%s()' % attr)
         else:
             raise ValueError('Attribute names must be valid identifiers.')
-    
-    def __init__(self, expose_link):
-        self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
 
 class ImmonetExposeParser(ExposeParser):
     pass    # dummy
