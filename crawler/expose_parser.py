@@ -5,7 +5,7 @@ class ExposeParser():
         return self.pyquery('title').text()
     
     def __getattr__(self, attr):
-        if re.match('[a-zA-Z_][a-zA-Z0-9_]*')
+        if re.match('[a-zA-Z_][a-zA-Z0-9_]*'):
             return eval('_get_%s()' % attr)
         else:
             raise ValueError('Attribute names must be valid identifiers.')

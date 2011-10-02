@@ -39,7 +39,7 @@ class Expose(models.Model):
     availability = models.CharField(max_length=30, blank=True)
     last_modified = models.DateField(auto_now=True, blank=True)
     
-    def __init__(self,expose_link)
+    def __init__(self,expose_link):
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
         models.Model(
             title = parser.title,
