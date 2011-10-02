@@ -1,6 +1,9 @@
 import re
 
 class ExposeParser():
+    def get_title(self):
+        return self.pyquery('title').text()
+    
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*')
             return eval('_get_%s()' % attr)
