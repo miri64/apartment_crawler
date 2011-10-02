@@ -3,6 +3,25 @@ import lxml.html
 
 from pyquery import PyQuery
 
+class AddressParser:
+    def __getattr__(self, attr):
+        if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
+            try:
+                return self.match.group(attr)
+            except IndexError:
+                return None
+            except AttributeError:
+                return None
+        else:
+            raise ValueError('Attribute names must be valid identifiers.')
+    
+    def __init__(self, address_string):
+        self.match = re.search(
+                '((((?P<name>[\w\W]+), ){0,1}(?P<street>[\w\W]+)\W+(?P<number>[0-9]+[A-Za-z]*), ){0,1}(?P<zip_code>[0-9]{5}) (?P<city>[\w\W]+)){0,1}', 
+                address_string, 
+                re.UNICODE | re.LOCALE
+            )
+
 class ExposeParser:
     def __init__(self, expose_link):
         self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
