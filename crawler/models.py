@@ -66,6 +66,7 @@ class Expose(models.Model):
         e = Expose(
                 title = parser.title,
                 expose_link = expose_link,
+                cold_rent = parser.cold_rent
             )
         e.save()
         return e
