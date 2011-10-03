@@ -82,6 +82,20 @@ class Expose(models.Model):
                 expose_link = expose_link,
                 cold_rent = parser.cold_rent,
                 additional_charges = parser.additional_charges,
+                operation_expenses = parser.operation_expenses,
+                heating_cost = parser.heating_cost,
+                total_rent = parser.total_rent,
+                heating_type = parser.heating_type,
+                object_state = parser.object_state,
+                security = parser.security,
+                commission = parser.commission,
+                space = parser.space,
+                floor = parser.floor,
+                flat_type = parser.flat_type,
+                rooms = parser.rooms,
+                year = parser.year,
+                availability = parser.availability,
+                last_modified = parser.last_modified,
             )
         e.save()
         return e
