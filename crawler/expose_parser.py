@@ -88,6 +88,11 @@ class ImmoscoutExposeParser(ExposeParser):
         return ImmoscoutExposeParser._get_float(
                 self.pyquery("strong.is24qa-kaltmiete").text()
             )
+    
+    def _get_additional_charges(self):
+        return ImmoscoutExposeParser._get_float(
+                self.pyquery("td.is24qa-nebenkosten").text()
+            )
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
