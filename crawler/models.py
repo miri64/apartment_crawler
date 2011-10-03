@@ -26,7 +26,7 @@ class ExposeManager(models.Manager):
     def get_query_set(self):
         query_set = super(ExposeManager, self).get_query_set()
         query_set.filter(
-                last_modified__lt=date.today() - 
+                last_modified__lte = date.today() - 
                         ExposeManager.MAXIMUM_EXPOSE_AGE
             ).delete()
         return query_set
