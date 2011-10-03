@@ -29,6 +29,16 @@ class ExposeParser(object):
     def _get_title(self):
         return self.pyquery('title').text()
     
+    @staticmethod
+    def _get_float(o):
+        f = re.search('([0-9]+.)*[0-9]+(,[0-9]+){0,1}', str(o))
+        if f != None:
+            f = f.group()
+            f = f.replace('.','')
+            f = f.replace(',','.')
+            return float(f)
+        return 0.0
+    
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
             return eval('self._get_%s()' % attr)
