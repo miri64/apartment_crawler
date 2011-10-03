@@ -85,7 +85,9 @@ class ImmonetExposeParser(ExposeParser):
 
 class ImmoscoutExposeParser(ExposeParser):
     def _get_cold_rent(self):
-        return ImmoscoutExposeParser._get_float(self.pyquery("strong.is24qa-kaltmiete").text())
+        return ImmoscoutExposeParser._get_float(
+                self.pyquery("strong.is24qa-kaltmiete").text()
+            )
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
