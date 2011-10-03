@@ -41,7 +41,7 @@ class ExposeParser(object):
             f = f.replace('.','')
             f = f.replace(',','.')
             return float(f)
-        return 0.0
+        return None
     
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
