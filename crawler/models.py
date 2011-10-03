@@ -20,9 +20,19 @@ class Contact(Address):
     web = models.CharField(max_length=100)
     mail = models.EmailField()
 
-class Expose(models.Model):
-    MAXIMUM_EXPOSE_AGE = 3
+class ExposeManager(models.Manager):
+    MAXIMUM_EXPOSE_AGE = timedelta(days=3)
     
+    def get_query_set(self):
+        query_set = super(ExposeManager, self).get_query_set()
+        query_set.filter(
+                last_modified__lt=date.today() - 
+                        ExposeManager.MAXIMUM_EXPOSE_AGE
+            ).delete()
+        return query_set
+
+class Expose(models.Model):
+    objects = ExposeManager()
     title = models.CharField(max_length=200)
     expose_link = models.CharField(max_length=100, primary_key=True)
     address = models.ForeignKey(Address, blank=True)
@@ -48,10 +58,7 @@ class Expose(models.Model):
     def get_expose_by_link(expose_link):
         try:
             old_expose = Expose.objects.get(expose_link = expose_link)
-            if old_expose.last_modified + \
-                    timedelta(days=Expose.MAXIMUM_EXPOSE_AGE) \
-                    >= date.today():
-                return old_expose
+            return old_expose
         except Expose.DoesNotExist:
             pass
         
