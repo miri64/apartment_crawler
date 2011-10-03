@@ -74,7 +74,9 @@ class ImmonetExposeParser(ExposeParser):
         return None
     
     def _get_cold_rent(self):
-        return ImmonetExposeParser._get_float(self._evaluate_table_value('Miete zzgl. NK'))
+        return ImmonetExposeParser._get_float(
+                self._evaluate_table_value('Miete zzgl. NK')
+            )
 
 class ImmoscoutExposeParser(ExposeParser):
     def _get_cold_rent(self):
