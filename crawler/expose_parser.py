@@ -107,10 +107,14 @@ class ImmoweltExposeParser(ExposeParser):
             self._basic_values[key] = value
     
     def _get_cold_rent(self):
-        return ImmoweltExposeParser._get_float(self._basic_values[u'Kaltmiete'])
+        return ImmoweltExposeParser._get_float(
+                self._basic_values[u'Kaltmiete']
+            )
     
     def _get_additional_charges(self):
-        return ImmoweltExposeParser._get_float(self._basic_values[u'Nebenkosten'])
+        return ImmoweltExposeParser._get_float(
+                self._basic_values[u'Nebenkosten']
+            )
 
 class ExposeParserFactory():
     # __new__ and __init__ make this class a singleton
