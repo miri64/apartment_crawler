@@ -11,6 +11,11 @@ class Address(models.Model):
     state = models.CharField(max_length=30)
     zip_code = models.CharField(max_length=10)
     city = models.CharField(max_length=30)
+    
+    class Meta:
+        unique_together = (
+                ('street','number','nation','state','zip_code','city',)
+            )
 
 class Contact(Address):
     name = models.CharField(max_length=30)
@@ -19,6 +24,15 @@ class Contact(Address):
     fax = models.CharField(max_length=30)
     web = models.CharField(max_length=100)
     mail = models.EmailField()
+    
+    class Meta:
+        unique_together = (
+                (
+                    'name','street','number','nation','state',
+                    'zip_code','city','phone','mobile','fax','web',
+                    'mail'
+                )
+            )
 
 class ExposeManager(models.Manager):
     MAXIMUM_EXPOSE_AGE = timedelta(days=3)
