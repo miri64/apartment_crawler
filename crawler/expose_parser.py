@@ -54,7 +54,7 @@ class ExposeParser(object):
             elif attr == 'operation_expenses':
                 return self._get_operation_expenses()
             else:
-                raise AttributeError("'%s' has no attribute '%s'" % (str(type(self)), attr))
+                return None
         else:
             raise ValueError('Attribute names must be valid identifiers.')
 
