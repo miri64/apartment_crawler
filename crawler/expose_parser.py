@@ -3,7 +3,7 @@ import lxml.html
 
 from pyquery import PyQuery
 
-class AddressParser:
+class AddressParser(object):
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
             try:
@@ -22,7 +22,7 @@ class AddressParser:
                 re.UNICODE | re.LOCALE
             )
 
-class ExposeParser:
+class ExposeParser(object):
     def __init__(self, expose_link):
         self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
     
