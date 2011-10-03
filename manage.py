@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from django.core.management import execute_manager
+import sys
 try:
     import settings # Assumed to be in the same directory.
 except ImportError:
@@ -8,4 +9,6 @@ except ImportError:
     sys.exit(1)
 
 if __name__ == "__main__":
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
     execute_manager(settings)

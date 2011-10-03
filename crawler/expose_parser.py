@@ -31,7 +31,11 @@ class ExposeParser(object):
     
     @staticmethod
     def _get_float(o):
-        f = re.search('([0-9]+.)*[0-9]+(,[0-9]+){0,1}', str(o))
+        f = re.search(
+                '([0-9]+.)*[0-9]+(,[0-9]+){0,1}', 
+                str(o), 
+                re.UNICODE | re.LOCALE
+            )
         if f != None:
             f = f.group()
             f = f.replace('.','')
