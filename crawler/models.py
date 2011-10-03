@@ -1,4 +1,7 @@
 from django.db import models
+
+from datetime import timedelta, date
+
 import expose_parser
 
 class Address(models.Model):
@@ -18,6 +21,8 @@ class Contact(Address):
     mail = models.EmailField()
 
 class Expose(models.Model):
+    MAXIMUM_EXPOSE_AGE = 3
+    
     title = models.CharField(max_length=200)
     expose_link = models.CharField(max_length=100, primary_key=True)
     address = models.ForeignKey(Address, blank=True)
@@ -39,9 +44,21 @@ class Expose(models.Model):
     availability = models.CharField(max_length=30, blank=True)
     last_modified = models.DateField(auto_now=True, blank=True)
     
-    def __init__(self,expose_link):
+    @staticmethod
+    def get_expose_by_link(expose_link):
+        try:
+            old_expose = Expose.objects.get(expose_link = expose_link)
+            if old_expose.last_modified + \
+                    timedelta(days=Expose.MAXIMUM_EXPOSE_AGE) \
+                    >= date.today():
+                return old_expose
+        except Expose.DoesNotExist:
+            pass
+        
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
-        super(Expose,self).__init__(
-            title = parser.title,
-            expose_link = expose_link,
-        )
+        e = Expose(
+                title = parser.title,
+                expose_link = expose_link,
+            )
+        e.save()
+        return e
