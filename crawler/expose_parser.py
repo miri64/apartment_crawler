@@ -122,6 +122,11 @@ class ImmoweltExposeParser(ExposeParser):
         return ImmoweltExposeParser._get_float(
                 self._basic_values[u'Nebenkosten']
             )
+    
+    def _get_operation_expenses(self):
+        return ImmoweltExposeParser._get_float(
+                self._basic_values[u'Betriebskosten']
+            )
 
 class ExposeParserFactory():
     # __new__ and __init__ make this class a singleton
