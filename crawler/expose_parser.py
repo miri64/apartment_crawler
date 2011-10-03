@@ -45,7 +45,14 @@ class ExposeParser(object):
     
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
-            return eval('self._get_%s()' % attr)
+            if attr == 'title':
+                return self._get_title()
+            elif attr == 'cold_rent':
+                return self._get_cold_rent()
+            elif attr == 'additional_charges':
+                return self._get_additional_charges()
+            else:
+                raise AttributeError("'%s' has no attribute '%s'" % (str(type(self)), attr))
         else:
             raise ValueError('Attribute names must be valid identifiers.')
 
