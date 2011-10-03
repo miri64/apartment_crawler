@@ -70,7 +70,8 @@ class ImmonetExposeParser(ExposeParser):
         return ImmonetExposeParser._get_float(self._evaluate_table_value('Miete zzgl. NK'))
 
 class ImmoscoutExposeParser(ExposeParser):
-    pass    # dummy
+    def _get_cold_rent(self):
+        return ImmoscoutExposeParser._get_float(self.pyquery("strong.is24qa-kaltmiete").text())
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
