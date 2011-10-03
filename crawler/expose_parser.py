@@ -118,17 +118,17 @@ class ImmoweltExposeParser(ExposeParser):
     
     def _get_cold_rent(self):
         return ImmoweltExposeParser._get_float(
-                self._basic_values[u'Kaltmiete']
+                self._basic_values.get(u'Kaltmiete')
             )
     
     def _get_additional_charges(self):
         return ImmoweltExposeParser._get_float(
-                self._basic_values[u'Nebenkosten']
+                self._basic_values.get(u'Nebenkosten')
             )
     
     def _get_operation_expenses(self):
         return ImmoweltExposeParser._get_float(
-                self._basic_values[u'Betriebskosten']
+                self._basic_values.get(u'Betriebskosten')
             )
 
 class ExposeParserFactory():
