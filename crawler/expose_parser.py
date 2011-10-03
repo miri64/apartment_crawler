@@ -46,7 +46,24 @@ class ExposeParser(object):
             raise ValueError('Attribute names must be valid identifiers.')
 
 class ImmonetExposeParser(ExposeParser):
-    pass    # dummy
+    def _find_in_table(self,sub):
+        try:
+            return [n for n in self.pyquery("td.label") \
+                    if unicode(n.text).find(sub) != -1
+                ][0].getparent()[1]
+        except IndexError:
+            return None
+    
+    def _evaluate_table_value(self,key):
+        value = self._find_in_table(key)
+        tostring = lambda tag: lxml.html.tostring(tag, encoding='utf8', method='text')
+        if value != None:
+            if len(tostring(value).strip()) > 0:
+                return tostring(value).strip()
+        return None
+    
+    def _get_cold_rent(self):
+        return ImmonetExposeParser._get_float(self._evaluate_table_value('Miete zzgl. NK'))
 
 class ImmoscoutExposeParser(ExposeParser):
     pass    # dummy
