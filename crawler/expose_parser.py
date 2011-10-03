@@ -73,7 +73,19 @@ class ImmoscoutExposeParser(ExposeParser):
     pass    # dummy
 
 class ImmoweltExposeParser(ExposeParser):
-    pass    # dummy
+    def __init__(self,*args,**kwargs):
+        super(ImmoweltExposeParser, self).__init__(*args,**kwargs)
+        self._basic_values = dict()
+        
+        keys = self.pyquery('span.eckdatenbezeichner')
+        values = self.pyquery('span.eckdatencontent')
+        for l,v in zip(keys,values):
+            key = lxml.html.tostring(l,encoding=unicode,method='text').strip().strip(':')
+            value = lxml.html.tostring(v,encoding=unicode,method='text').strip()
+            self._basic_values[key] = value
+    
+    def _get_cold_rent(self):
+        return ImmoweltExposeParser._get_float(self._basic_values[u'Kaltmiete'])
 
 class ExposeParserFactory():
     # __new__ and __init__ make this class a singleton
