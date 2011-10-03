@@ -51,6 +51,8 @@ class ExposeParser(object):
                 return self._get_cold_rent()
             elif attr == 'additional_charges':
                 return self._get_additional_charges()
+            elif attr == 'operation_expenses':
+                return self._get_operation_expenses()
             else:
                 raise AttributeError("'%s' has no attribute '%s'" % (str(type(self)), attr))
         else:
@@ -81,6 +83,11 @@ class ImmonetExposeParser(ExposeParser):
     def _get_additional_charges(self):
         return ImmonetExposeParser._get_float(
                 self._evaluate_table_value('Nebenkosten')
+            )
+    
+    def _get_operation_expenses(self):
+        return ImmoweltExposeParser._get_float(
+                self._evaluate_table_value('Betriebskosten')
             )
 
 class ImmoscoutExposeParser(ExposeParser):
