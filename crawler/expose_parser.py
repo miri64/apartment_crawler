@@ -77,6 +77,11 @@ class ImmonetExposeParser(ExposeParser):
         return ImmonetExposeParser._get_float(
                 self._evaluate_table_value('Miete zzgl. NK')
             )
+    
+    def _get_additional_charges(self):
+        return ImmonetExposeParser._get_float(
+                self._evaluate_table_value('Nebenkosten')
+            )
 
 class ImmoscoutExposeParser(ExposeParser):
     def _get_cold_rent(self):
