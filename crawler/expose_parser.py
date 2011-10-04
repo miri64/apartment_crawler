@@ -48,12 +48,42 @@ class ExposeParser(object):
             try:
                 if attr == 'title':
                     return self._get_title()
+                elif attr == 'address':
+                    return self._get_address()
+                elif attr == 'contact':
+                    return self._get_contact()
                 elif attr == 'cold_rent':
                     return self._get_cold_rent()
                 elif attr == 'additional_charges':
                     return self._get_additional_charges()
                 elif attr == 'operation_expenses':
                     return self._get_operation_expenses()
+                elif attr == 'heating_cost':
+                    return self._get_heating_cost()
+                elif attr == 'total_rent':
+                    return self._get_total_rent()
+                elif attr == 'heating_type':
+                    return self._get_heating_type()
+                elif attr == 'object_state':
+                    return self._get_object_state()
+                elif attr == 'security':
+                    return self._get_security()
+                elif attr == 'commission':
+                    return self._get_commission()
+                elif attr == 'space':
+                    return self._get_space()
+                elif attr == 'floor':
+                    return self._get_floor()
+                elif attr == 'flat_type':
+                    return self._get_flat_type()
+                elif attr == 'rooms':
+                    return self._get_rooms()
+                elif attr == 'year':
+                    return self._get_year()
+                elif attr == 'availability':
+                    return self._get_availability()
+                elif attr == 'last_modified':
+                    return self._get_last_modified()
                 else:
                     return None
             except TypeError:
