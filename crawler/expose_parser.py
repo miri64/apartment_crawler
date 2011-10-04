@@ -251,7 +251,7 @@ class ExposeParserFactory():
     def __new__(type, *args):
         if not '_the_instance' in type.__dict__:
             type._the_instance = object.__new__(type)
-        return type_the_instance
+        return type._the_instance
     
     def __init__(self):
         if not '_ready' in dir(self):
