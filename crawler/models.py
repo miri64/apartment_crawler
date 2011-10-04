@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 
 from datetime import timedelta, date
 
@@ -68,9 +68,18 @@ class Expose(models.Model):
             pass
         
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
+        address = Address(**parser.address)
+        try:
+            address.save()
+        except IntegrityError, e:
+            if e.args[0] != 1062:
+                raise e
+            else:
+                address = Address.objects.get(**parser.address)
         e = Expose(
                 title = parser.title,
                 expose_link = expose_link,
+                address = address,
                 cold_rent = parser.cold_rent,
                 additional_charges = parser.additional_charges,
                 operation_expenses = parser.operation_expenses,
