@@ -194,6 +194,11 @@ class ImmoscoutExposeParser(ExposeParser):
         return ImmoscoutExposeParser._get_float(
                 self.pyquery("td.is24qa-heizkosten").text()
             )
+    
+    def _get_original_total_rent(self):
+        return ImmoscoutExposeParser._get_float(
+                self.pyquery("strong.is24qa-gesamtmiete").text()
+            )
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
