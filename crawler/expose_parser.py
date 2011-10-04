@@ -179,6 +179,23 @@ class ImmoscoutExposeParser(ExposeParser):
                 self.pyquery("strong.is24qa-kaltmiete").text()
             )
     
+    def _get_address_string(self):
+        address = lxml.html.tostring(self.pyquery("div.is24-ex-address p")[1],
+                method="text",
+                encoding="iso-8859-1"
+            )
+            
+        if len(address) > 0:
+            address = address.replace(',','')
+            address = address.replace('\r','')
+            address = address.replace('Karte ansehenStreet View','')
+            address = address.strip()
+            address = unicode(
+                    re.sub('\n\s+', ', ', address),encoding='iso-8859-1'
+                )
+        
+        return address
+    
     def _get_additional_charges(self):
         return ImmoscoutExposeParser._get_float(
                 self.pyquery("td.is24qa-nebenkosten").text()
