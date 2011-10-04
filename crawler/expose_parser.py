@@ -23,6 +23,28 @@ class AddressParser(object):
             )
 
 class ExposeParser(object):
+    abstract_methods = (
+        '_get_expose_link',
+        '_get_address',
+        '_get_contact',
+        '_get_cold_rent',
+        '_get_additional_charges',
+        '_get_operation_expenses',
+        '_get_heating_cost',
+        '_get_total_rent',
+        '_get_heating_type',
+        '_get_object_state',
+        '_get_security',
+        '_get_commission',
+        '_get_space',
+        '_get_floor',
+        '_get_flat_type',
+        '_get_rooms',
+        '_get_year',
+        '_get_availability',
+        '_get_last_modified',
+    )
+    
     def __init__(self, expose_link):
         self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
     
@@ -45,48 +67,47 @@ class ExposeParser(object):
     
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
-            try:
-                if attr == 'title':
-                    return self._get_title()
-                elif attr == 'address':
-                    return self._get_address()
-                elif attr == 'contact':
-                    return self._get_contact()
-                elif attr == 'cold_rent':
-                    return self._get_cold_rent()
-                elif attr == 'additional_charges':
-                    return self._get_additional_charges()
-                elif attr == 'operation_expenses':
-                    return self._get_operation_expenses()
-                elif attr == 'heating_cost':
-                    return self._get_heating_cost()
-                elif attr == 'total_rent':
-                    return self._get_total_rent()
-                elif attr == 'heating_type':
-                    return self._get_heating_type()
-                elif attr == 'object_state':
-                    return self._get_object_state()
-                elif attr == 'security':
-                    return self._get_security()
-                elif attr == 'commission':
-                    return self._get_commission()
-                elif attr == 'space':
-                    return self._get_space()
-                elif attr == 'floor':
-                    return self._get_floor()
-                elif attr == 'flat_type':
-                    return self._get_flat_type()
-                elif attr == 'rooms':
-                    return self._get_rooms()
-                elif attr == 'year':
-                    return self._get_year()
-                elif attr == 'availability':
-                    return self._get_availability()
-                elif attr == 'last_modified':
-                    return self._get_last_modified()
-                else:
-                    return None
-            except TypeError:
+            if attr in ExposeParser.abstract_methods:
+                return lambda *args, **kwargs: None
+            if attr == 'title':
+                return self._get_title()
+            elif attr == 'address':
+                return self._get_address()
+            elif attr == 'contact':
+                return self._get_contact()
+            elif attr == 'cold_rent':
+                return self._get_cold_rent()
+            elif attr == 'additional_charges':
+                return self._get_additional_charges()
+            elif attr == 'operation_expenses':
+                return self._get_operation_expenses()
+            elif attr == 'heating_cost':
+                return self._get_heating_cost()
+            elif attr == 'total_rent':
+                return self._get_total_rent()
+            elif attr == 'heating_type':
+                return self._get_heating_type()
+            elif attr == 'object_state':
+                return self._get_object_state()
+            elif attr == 'security':
+                return self._get_security()
+            elif attr == 'commission':
+                return self._get_commission()
+            elif attr == 'space':
+                return self._get_space()
+            elif attr == 'floor':
+                return self._get_floor()
+            elif attr == 'flat_type':
+                return self._get_flat_type()
+            elif attr == 'rooms':
+                return self._get_rooms()
+            elif attr == 'year':
+                return self._get_year()
+            elif attr == 'availability':
+                return self._get_availability()
+            elif attr == 'last_modified':
+                return self._get_last_modified()
+            else:
                 return None
         else:
             raise ValueError('Attribute names must be valid identifiers.')
