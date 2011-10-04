@@ -154,6 +154,11 @@ class ImmoscoutExposeParser(ExposeParser):
         return ImmoscoutExposeParser._get_float(
                 self.pyquery("td.is24qa-nebenkosten").text()
             )
+    
+    def _get_heating_cost(self):
+        return ImmoscoutExposeParser._get_float(
+                self.pyquery("td.is24qa-heizkosten").text()
+            )
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
