@@ -29,9 +29,11 @@ class ExposeParser(object):
         '_get_contact',
         '_get_cold_rent',
         '_get_additional_charges',
+        '_is_operation_expenses_in_additional_expenses',
         '_get_operation_expenses',
+        '_is_heating_cost_in_additional_expenses',
         '_get_heating_cost',
-        '_get_total_rent',
+        '_get_original_total_rent',
         '_get_heating_type',
         '_get_object_state',
         '_get_security',
@@ -111,6 +113,22 @@ class ExposeParser(object):
                 return None
         else:
             raise ValueError('Attribute names must be valid identifiers.')
+    
+    def _get_total_rent(self):
+        total_rent = 0.0
+        for c in ('cold_rent','operation_expenses','heating_cost'):
+            if     (c == 'heating_cost' and \
+                    self._is_heating_cost_in_additional_expenses()) or \
+                   (c == 'operation_expenses' and \
+                    self._is_operation_expenses_in_additional_expenses()):
+                continue
+            cost = self.__getattr__(c)
+            if cost != None:
+                total_rent += cost
+        original_total_rent = self._get_original_total_rent()
+        if original_total_rent > total_rent:
+            total_rent = original_total_rent
+        return total_rent
 
 class ImmonetExposeParser(ExposeParser):
     def _find_in_table(self,sub):
