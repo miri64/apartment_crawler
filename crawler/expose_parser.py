@@ -7,7 +7,7 @@ class AddressParser(object):
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
             try:
-                return self.match.group(attr)
+                return self.match.group(attr).strip()
             except IndexError:
                 return None
             except AttributeError:
@@ -17,15 +17,15 @@ class AddressParser(object):
     
     def __init__(self, address_string):
         self.match = re.search(
-                '((((?P<name>[\w\W]+), ){0,1}(?P<street>[\w\W]+)\W+(?P<number>[0-9]+[A-Za-z]*), ){0,1}(?P<zip_code>[0-9]{5}) (?P<city>[\w\W]+)){0,1}', 
+                '((?P<street>[\s\w-]+)\s+(?P<number>[0-9]+[A-Za-z]*),\s+){0,1}(?P<zip_code>[0-9]{5})\s+(?P<city>[\s\w,-]+)\s*(\((?P<district>.*)\)){0,1}', 
                 address_string, 
-                re.UNICODE | re.LOCALE
+                re.UNICODE
             )
 
 class ExposeParser(object):
     abstract_methods = (
         '_get_expose_link',
-        '_get_address',
+        '_get_address_string',
         '_get_contact',
         '_get_cold_rent',
         '_get_additional_charges',
@@ -129,6 +129,17 @@ class ExposeParser(object):
         if original_total_rent > total_rent:
             total_rent = original_total_rent
         return total_rent
+    
+    def _get_address(self):
+        address = AddressParser(self._get_address_string())
+        return {
+                'street': address.street if address.street != None else '',
+                'number': address.number if address.number != None else '',
+                'nation': address.nation if address.nation != None else '',
+                'state': address.state if address.state != None else '',
+                'zip_code': address.zip_code if address.zip_code != None else '',
+                'city': address.city if address.city != None else '',
+            }
 
 class ImmonetExposeParser(ExposeParser):
     def _find_in_table(self,sub):
