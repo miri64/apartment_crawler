@@ -203,19 +203,9 @@ class ImmoscoutExposeParser(ExposeParser):
     
     def _is_heating_cost_in_additional_expenses(self):
         heating_cost = self.pyquery("td.is24qa-heizkosten").text()
-        match = re.search(
-                'in Nebenkosten',
-                heating_cost,
-                re.IGNORECASE
-            )
             
-        if match != None:
-            match = re.search(
-                'nicht in Nebenkosten',
-                heating_cost,
-                re.IGNORECASE
-            )
-            return match == None
+        if heating_cost.find('in Nebenkosten') >= 0:
+            return heating_cost.find('nicht in Nebenkosten') < 0
         return False
     
     def _get_heating_cost(self):
