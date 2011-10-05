@@ -51,7 +51,7 @@ class Expose(models.Model):
     total_rent = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     heating_type = models.CharField(max_length=20, blank=True, null=True)
     object_state = models.CharField(max_length=30, blank=True, null=True)
-    security = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    security = models.CharField(max_length=30, blank=True, null=True)
     commission = models.CharField(max_length=30, blank=True, null=True)
     space = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     floor = models.IntegerField(blank=True, null=True)

@@ -232,6 +232,16 @@ class ImmoscoutExposeParser(ExposeParser):
     def _get_object_state(self):
         object_state = self.pyquery("td.is24qa-objektzustand").text()
         return object_state
+    
+    def _get_security(self):
+        security = self.pyquery("td.is24qa-kaution-oder-genossenschaftsanteile")
+        security('a.is24-internal').remove()
+        security = security.text()
+        if security == None:
+            security = self.pyquery("td.is24-mortgage")
+            security('a.is24-internal').remove()
+            security = security.text()
+        return security
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
