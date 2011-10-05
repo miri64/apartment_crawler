@@ -15,6 +15,9 @@ class AddressParser(object):
         else:
             raise ValueError('Attribute names must be valid identifiers.')
     
+    def address_is_empty(self):
+        return self.match == None
+    
     def __init__(self, address_string):
         self.match = re.search(
                 '((?P<street>[\s\w-]+)\s+(?P<number>[0-9]+[A-Za-z]*),\s+){0,1}(?P<zip_code>[0-9]{5})\s+(?P<city>[\s\w,-]+)\s*(\((?P<district>.*)\)){0,1}', 
@@ -138,14 +141,17 @@ class ExposeParser(object):
     
     def _get_address(self):
         address = AddressParser(self._get_address_string())
-        return {
-                'street': address.street if address.street != None else '',
-                'number': address.number if address.number != None else '',
-                'nation': address.nation if address.nation != None else '',
-                'state': address.state if address.state != None else '',
-                'zip_code': address.zip_code if address.zip_code != None else '',
-                'city': address.city if address.city != None else '',
-            }
+        if address.address_is_empty():
+            return None
+        else:
+            return {
+                    'street': address.street if address.street != None else '',
+                    'number': address.number if address.number != None else '',
+                    'nation': address.nation if address.nation != None else '',
+                    'state': address.state if address.state != None else '',
+                    'zip_code': address.zip_code if address.zip_code != None else '',
+                    'city': address.city if address.city != None else '',
+                }
 
 class ImmonetExposeParser(ExposeParser):
     def _find_in_table(self,sub):
