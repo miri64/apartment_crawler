@@ -224,6 +224,12 @@ class ImmoscoutExposeParser(ExposeParser):
         return ImmoscoutExposeParser._get_float(
                 self.pyquery("strong.is24qa-gesamtmiete").text()
             )
+    
+    def _get_heating_type(self):
+        heating_type = self.pyquery("td.is24qa-heizungsart").text()
+        if len(heating_type) == 0:
+            return None
+        return heating_type
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
