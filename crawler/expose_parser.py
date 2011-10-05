@@ -86,8 +86,12 @@ class ExposeParser(object):
                 return self._get_additional_charges()
             elif attr == 'operation_expenses':
                 return self._get_operation_expenses()
+            elif attr == 'oe_in_ac':
+                return self._is_operation_expenses_in_additional_expenses()
             elif attr == 'heating_cost':
                 return self._get_heating_cost()
+            elif attr == 'hc_in_ac':
+                return self._is_heating_cost_in_additional_expenses()
             elif attr == 'total_rent':
                 return self._get_total_rent()
             elif attr == 'heating_type':
