@@ -230,6 +230,10 @@ class ImmoscoutExposeParser(ExposeParser):
         if len(heating_type) == 0:
             return None
         return heating_type
+    
+    def _get_object_state(self):
+        object_state = self.pyquery("td.is24qa-objektzustand").text()
+        return object_state
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
