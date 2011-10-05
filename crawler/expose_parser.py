@@ -226,12 +226,10 @@ class ImmoscoutExposeParser(ExposeParser):
             )
     
     def _get_heating_type(self):
-        heating_type = self.pyquery("td.is24qa-heizungsart").text()
-        return heating_type
+        return self.pyquery("td.is24qa-heizungsart").text()
     
     def _get_object_state(self):
-        object_state = self.pyquery("td.is24qa-objektzustand").text()
-        return object_state
+        return self.pyquery("td.is24qa-objektzustand").text()
     
     def _get_security(self):
         security = self.pyquery("td.is24qa-kaution-oder-genossenschaftsanteile")
