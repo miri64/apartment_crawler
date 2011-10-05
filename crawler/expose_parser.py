@@ -70,7 +70,10 @@ class ExposeParser(object):
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
             if attr in ExposeParser.abstract_methods:
-                return lambda *args, **kwargs: None
+                if attr.find('_is_') == 0:
+                    return lambda *args, **kwargs: False
+                else:
+                    return lambda *args, **kwargs: None
             if attr == 'title':
                 return self._get_title()
             elif attr == 'address':
