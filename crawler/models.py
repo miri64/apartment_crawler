@@ -57,7 +57,7 @@ class Expose(models.Model):
     rooms = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     year = models.IntegerField(blank=True, null=True)
     availability = models.CharField(max_length=30, blank=True, null=True)
-    last_modified = models.DateField(auto_now=True, blank=True, null=True)
+    last_modified = models.DateField(auto_now=True)
     
     @staticmethod
     def get_expose_by_link(expose_link):
@@ -95,7 +95,6 @@ class Expose(models.Model):
                 rooms = parser.rooms,
                 year = parser.year,
                 availability = parser.availability,
-                last_modified = parser.last_modified,
             )
         e.save()
         return e
