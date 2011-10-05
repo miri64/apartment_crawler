@@ -44,7 +44,6 @@ class ExposeParser(object):
             '_get_rooms',
             '_get_year',
             '_get_availability',
-            '_get_last_modified',
         )
     
     def __init__(self, expose_link):
