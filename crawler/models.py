@@ -45,7 +45,9 @@ class Expose(models.Model):
     cold_rent = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     additional_charges = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     operation_expenses = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    operation_expenses_in_additional_charges = models.BooleanField(default=False)
     heating_cost = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    heating_cost_in_additional_charges = models.BooleanField(default=False)
     total_rent = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     heating_type = models.CharField(max_length=20, blank=True, null=True)
     object_state = models.CharField(max_length=30, blank=True, null=True)
@@ -83,7 +85,9 @@ class Expose(models.Model):
                 cold_rent = parser.cold_rent,
                 additional_charges = parser.additional_charges,
                 operation_expenses = parser.operation_expenses,
+                operation_expenses_in_additional_charges = parser.oe_in_ac,
                 heating_cost = parser.heating_cost,
+                heating_cost_in_additional_charges = parser.hc_in_ac,
                 total_rent = parser.total_rent,
                 heating_type = parser.heating_type,
                 object_state = parser.object_state,
