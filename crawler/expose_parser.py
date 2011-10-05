@@ -239,6 +239,37 @@ class ImmoscoutExposeParser(ExposeParser):
             security('a.is24-internal').remove()
             security = security.text()
         return security
+        
+    def _get_commission(self):
+        return self.pyquery("td.is24qa-provision").text()
+    
+    def _get_space(self):
+        return ImmoscoutExposeParser._get_float(
+                self.pyquery("td.is24qa-wohnflaeche-ca").text()
+            )
+    
+    def _get_floor(self):
+        floor = self.pyquery("td.is24qa-etage").text()
+        if floor == None:
+            return floor
+        return int(floor)
+    
+    def _get_flat_type(self):
+        return self.pyquery("td.is24qa-wohnungstyp").text()
+    
+    def _get_rooms(self):
+        return ImmoscoutExposeParser._get_float(
+                self.pyquery("td.is24qa-zimmer").text()
+            )
+    
+    def _get_year(self):
+        year = self.pyquery("td.is24qa-baujahr").text()
+        if year == None:
+            return year
+        return int(year)
+    
+    def _get_availability(self):
+        return self.pyquery("td.is24qa-bezugsfrei-ab").text()
 
 class ImmoweltExposeParser(ExposeParser):
     def __init__(self,*args,**kwargs):
