@@ -70,6 +70,7 @@ class ExposeParser(object):
         )
     
     def __init__(self, expose_link):
+        self._expose_link = expose_link
         self.pyquery = PyQuery(lxml.html.parse(expose_link).getroot())
     
     def _get_title(self):
