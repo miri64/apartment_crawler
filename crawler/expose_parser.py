@@ -163,7 +163,7 @@ class ExposeParser(object):
     def _get_address(self):
         address = AddressParser(self._get_address_string())
         if address.address_is_empty():
-            return None
+            return {}
         else:
             return {
                     'street': address.street if address.street != None else '',
