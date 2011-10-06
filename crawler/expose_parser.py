@@ -32,10 +32,10 @@ class AddressParser(object):
         street_pattern = '(?P<street>[\s\WA-Za-z]+[0-9]*)'
         number_pattern = r'(?P<number>[0-9]+[A-Za-z]{0,1}((\s*-\s*)*[0-9]+[A-Za-z]{0,1}){0,1})'
         zip_pattern = r'(?P<zip_code>[0-9]{5})'
-        city_pattern = r'(?P<city>[\s\w,-]+)'
-        district_pattern = r'(?P<district>.*)'
+        city_pattern = r'(?P<city>[\s\w-]+)'
+        district_pattern = r'\({0,1}\s*(?P<district>[^,()]*)\s*\){0,1}'
         self.match = re.search(
-                r'(%s\s+%s,\s+){0,1}%s\s+%s\s*(\(%s\)){0,1}' % 
+                r'(%s\s+%s,\s+){0,1}%s\s+%s(,\s*%s){0,1}' % 
                     (
                         street_pattern,
                         number_pattern,
@@ -102,6 +102,8 @@ class ExposeParser(object):
                 return self._get_title()
             elif attr == 'address':
                 return self._get_address()
+            elif attr == 'district':
+                return self._get_district()
             elif attr == 'contact':
                 return self._get_contact()
             elif attr == 'cold_rent':
@@ -176,6 +178,11 @@ class ExposeParser(object):
                     'zip_code': address.zip_code if address.zip_code != None else '',
                     'city': address.city if address.city != None else '',
                 }
+    
+    def _get_district(self):
+        address = AddressParser(self._get_address_string())
+        # What if district == ''
+        return address.district
 
 class ImmonetExposeParser(ExposeParser):
     def _find_in_table(self,sub):
