@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import re
 import lxml.html
 
@@ -7,7 +9,14 @@ class AddressParser(object):
     def __getattr__(self, attr):
         if re.match('[a-zA-Z_][a-zA-Z0-9_]*', attr) != None:
             try:
-                return self.match.group(attr).strip()
+                value = self.match.group(attr).strip()
+                if attr == 'street':
+                    value = re.sub(r'([Ss])tr\.',u'\\1traße',value)
+                    value = re.sub(r'([Pp])l\.',r'\1latz',value)
+                if attr == 'number':
+                    value = re.sub(r'\s+','',value)
+                    value = value.lower()
+                return value
             except IndexError:
                 return None
             except AttributeError:
