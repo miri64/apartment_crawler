@@ -5,8 +5,8 @@ from datetime import timedelta, date
 import expose_parser
 
 class Address(models.Model):
-    street = models.CharField(max_length=20, default='')
-    number = models.CharField(max_length=5, default='')
+    street = models.CharField(max_length=50, default='')
+    number = models.CharField(max_length=10, default='')
     nation = models.CharField(max_length=3, default='')
     state = models.CharField(max_length=30, default='')
     zip_code = models.CharField(max_length=10, default='')
