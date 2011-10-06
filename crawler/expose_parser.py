@@ -160,8 +160,10 @@ class ExposeParser(object):
             total_rent = original_total_rent
         return total_rent
     
-    def _get_address(self):
-        address = AddressParser(self._get_address_string())
+    def _get_address(self, address_string = None):
+        if address_string == None:
+            address_string = self._get_address_string()
+        address = AddressParser(address_strings)
         if address.address_is_empty():
             return {}
         else:
