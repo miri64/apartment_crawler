@@ -18,12 +18,19 @@ class Address(models.Model):
             )
 
 class Contact(Address):
+    contact_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30, default='')
     phone = models.CharField(max_length=30, default='')
     mobile = models.CharField(max_length=30, default='')
     fax = models.CharField(max_length=30, default='')
     web = models.CharField(max_length=100, default='')
     mail = models.EmailField(default='')
+    further_information = models.TextField(default='')
+    
+    class Meta:
+        unique_together = (
+            ('name','phone','mobile','fax','web','mail')
+        )
 
 class ExposeManager(models.Manager):
     MAXIMUM_EXPOSE_AGE = timedelta(days=3)
@@ -70,18 +77,32 @@ class Expose(models.Model):
             pass
         
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
-        address = Address(**parser.address)
-        try:
-            address.save()
-        except IntegrityError, e:
-            if e.args[0] != 1062:
-                raise e
-            else:
+        address = None
+        contact = None
+        
+        address_dict = parser.address
+        if len(address_dict) > 0:
+            address = Address(**address_dict)
+            try:
+                address.save()
+            except IntegrityError, e:
+                if e.args[0] != 1062:
+                    raise e
                 address = Address.objects.get(**parser.address)
+        contact_dict = parser.contact        
+        if len(contact_dict) > 0:
+            contact = Contact(**contact_dict)
+            try:
+                contact.save()
+            except IntegrityError, e:
+                if e.args[0] != 1062:
+                    raise e
+                contact = Contact.objects.get(**parser.contact)
         e = Expose(
                 title = parser.title,
                 expose_link = expose_link,
                 address = address,
+                contact = contact,
                 cold_rent = parser.cold_rent,
                 additional_charges = parser.additional_charges,
                 operation_expenses = parser.operation_expenses,

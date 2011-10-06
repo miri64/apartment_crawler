@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
 
 import re
-import lxml.html
+from urlparse import urlparse,urlunparse
 
+import lxml.html
 from pyquery import PyQuery
 
 class AddressParser(object):
@@ -230,6 +231,53 @@ class ImmoscoutExposeParser(ExposeParser):
                 )
         
         return address
+    
+    def _get_contact(self):
+        realtor_box = self.pyquery("div#is24-expose-realtor-box").html()
+        impressum_link = re.search('href="(?P<link>[^"]*realtorId=[0-9]*)"',realtor_box)
+        contact = dict()
+        web = self.pyquery("a#is24-expose-realtor-box-homepage").text()
+        contact['web'] = web.strip() if web else ''
+        for span in self.pyquery("div.is24-phone p span"):
+            if span.text.lower().find('telefon') == 0:
+                contact['phone'] = span.tail.strip() if span.tail else ''
+            elif span.text.lower().find('mobil') == 0:
+                contact['mobile'] = span.tail.strip() if span.tail else ''
+            elif span.text.lower().find('fax') == 0:
+                contact['fax'] = span.tail.strip() if span.tail else ''
+        if impressum_link != None:
+            expose_url = urlparse(self._expose_link)
+            impressum_link = urlunparse((
+                    expose_url.scheme,
+                    expose_url.netloc,
+                    impressum_link.group('link'),
+                    None,None,None
+                ))
+            pyquery = PyQuery(lxml.html.parse(impressum_link).getroot())
+            name = pyquery('div#is24-content h3').text()
+            contact['name'] = name.strip() if name != None else ''
+            paragraphs = pyquery('div#is24-content p')
+            address = paragraphs.html().strip()
+            if address != None:
+                address = address.replace('<br />',', ')
+                address = re.sub('(&#13;)*','',address)
+                address = re.sub('\s+',' ',address)
+                address = self._get_address(address)
+                contact.update(address)
+            if len(paragraphs) > 1:
+                for child in paragraphs[1]:
+                    if child.tag == 'span':
+                        if child.text.lower().find('tel') == 0 and \
+                                contact.get('phone') == None:
+                            contact['phone'] = child.tail.strip()
+                        elif child.text.lower().find('fax') == 0 and \
+                                contact.get('fax') == None:
+                            contact['fax'] = child.tail.strip()
+                        elif child.text.lower().find('e-mail') == 0 and \
+                                contact.get('mail') == None:
+                            contact['mail'] = child.tail.strip()
+                contact['further_information'] = pyquery('div#is24-content p.is24-pre').text().replace('\r','')
+        return contact
     
     def _get_additional_charges(self):
         return ImmoscoutExposeParser._get_float(
