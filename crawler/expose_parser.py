@@ -28,10 +28,21 @@ class AddressParser(object):
         return self.match == None
     
     def __init__(self, address_string):
+        street_pattern = '(?P<street>[\s\WA-Za-z]+[0-9]*)'
+        number_pattern = r'(?P<number>[0-9]+[A-Za-z]{0,1}((\s*-\s*)*[0-9]+[A-Za-z]{0,1}){0,1})'
+        zip_pattern = r'(?P<zip_code>[0-9]{5})'
+        city_pattern = r'(?P<city>[\s\w,-]+)'
+        district_pattern = r'(?P<district>.*)'
         self.match = re.search(
-                '((?P<street>[\s\w-]+)\s+(?P<number>[0-9]+[A-Za-z]*),\s+){0,1}(?P<zip_code>[0-9]{5})\s+(?P<city>[\s\w,-]+)\s*(\((?P<district>.*)\)){0,1}', 
-                address_string, 
-                re.UNICODE
+                r'(%s\s+%s,\s+){0,1}%s\s+%s\s*(\(%s\)){0,1}' % 
+                    (
+                        street_pattern,
+                        number_pattern,
+                        zip_pattern,
+                        city_pattern,
+                        district_pattern,
+                    ), 
+                address_string
             )
 
 class ExposeParser(object):
