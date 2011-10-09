@@ -11,6 +11,7 @@ class Address(models.Model):
     state = models.CharField(max_length=30, default='')
     zip_code = models.CharField(max_length=10, default='')
     city = models.CharField(max_length=30, default='')
+    district = models.CharField(max_length=50, default='')
     
     class Meta:
         unique_together = (

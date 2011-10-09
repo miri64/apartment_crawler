@@ -163,6 +163,12 @@ class ExposeParser(object):
             total_rent = original_total_rent
         return total_rent
     
+    def _get_district(self,address):
+        if address.district == None:
+            pass # TODO
+            return ''
+        return address.district
+    
     def _get_address(self, address_string = None):
         if address_string == None:
             address_string = self._get_address_string()
@@ -177,12 +183,8 @@ class ExposeParser(object):
                     'state': address.state if address.state != None else '',
                     'zip_code': address.zip_code if address.zip_code != None else '',
                     'city': address.city if address.city != None else '',
+                    'district': self._get_district(address),
                 }
-    
-    def _get_district(self):
-        address = AddressParser(self._get_address_string())
-        # What if district == ''
-        return address.district
 
 class ImmonetExposeParser(ExposeParser):
     def _find_in_table(self,sub):
