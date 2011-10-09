@@ -48,7 +48,6 @@ class AddressParser(object):
 
 class ExposeParser(object):
     abstract_methods = (
-            '_get_expose_link',
             '_get_address_string',
             '_get_contact',
             '_get_cold_rent',
