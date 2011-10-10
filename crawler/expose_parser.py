@@ -208,6 +208,49 @@ class ImmonetExposeParser(ExposeParser):
     def _is_not_online(self):
         return self._get_title() == 'Objekt nicht gefunden'
     
+    def _get_contact(self):
+        realtor_box = self.pyquery("div#anbieter div.boxContPad").html()
+        if realtor_box == None:
+            return {}
+        impressum_link = re.search('href="(?P<link>/immobilienmakler/impressum-[^"]*)"',realtor_box)
+        contact = dict()
+        if impressum_link != None:
+            tostring = lambda node, method='text': \
+                    lxml.html.tostring(node, method=method, encoding='iso-8859-1') \
+                    if node != None else ''
+            expose_url = urlparse(self._expose_link)
+            impressum_link = urlunparse((
+                    expose_url.scheme,
+                    expose_url.netloc,
+                    impressum_link.group('link'),
+                    None,None,None
+                ))
+            pyquery = PyQuery(lxml.html.parse(impressum_link).getroot())
+            name = pyquery('div.content h2')
+            contact['name'] = tostring(name[0]).strip()
+            paragraphs = pyquery('div.content p')
+            if len(paragraphs) > 1:
+                address = tostring(paragraphs[1],'html')
+                address = re.sub(',*\s*<br\s*/{0,1}>',', ',address)
+                address = re.sub('<.*>','',address)
+                address = re.sub('\s+',' ',address)
+                address = self._get_address(address.strip())
+                contact.update(address)
+            contact_table = pyquery('div.content table tr')
+            for row in contact_table:
+                if len(row) > 1:
+                    if tostring(row[0]).lower().find('telefon') >= 0:
+                        contact['phone'] = tostring(row[1])
+                    if tostring(row[0]).lower().find('telefax') >= 0:
+                        contact['fax'] = tostring(row[1])
+                    if tostring(row[0]).lower().find('mobil') >= 0:
+                        contact['mobile'] = tostring(row[1])
+                    if tostring(row[0]).lower().find('e-mail') >= 0:
+                        contact['mail'] = tostring(row[1])
+                    if tostring(row[0]).lower().find('homepage') >= 0:
+                        contact['web'] = tostring(row[1])
+        return contact
+    
     def _get_cold_rent(self):
         return ImmonetExposeParser._get_float(
                 self._evaluate_table_value('Miete zzgl. NK')
