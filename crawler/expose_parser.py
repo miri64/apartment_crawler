@@ -242,6 +242,8 @@ class ImmoscoutExposeParser(ExposeParser):
     
     def _get_contact(self):
         realtor_box = self.pyquery("div#is24-expose-realtor-box").html()
+        if realtor_box == None:
+            return {}
         impressum_link = re.search('href="(?P<link>[^"]*realtorId=[0-9]*)"',realtor_box)
         contact = dict()
         web = self.pyquery("a#is24-expose-realtor-box-homepage").text()
