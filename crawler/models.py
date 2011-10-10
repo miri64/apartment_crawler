@@ -1,4 +1,4 @@
-from django.db import models, IntegrityError
+from django.db import models
 
 from datetime import timedelta, date
 
@@ -70,6 +70,17 @@ class Expose(models.Model):
     last_modified = models.DateField(auto_now=True)
     
     @staticmethod
+    def _get_reference(reference_type, *args, **kwargs):
+        reference = None
+        if len(args) > 0 or len(kwargs) > 0:
+            try:
+                reference = reference_type.objects.get(*args, **kwargs)
+            except reference_type.DoesNotExist:
+                reference = reference_type(*args, **kwargs)
+                reference.save()
+        return reference
+    
+    @staticmethod
     def get_expose_by_link(expose_link):
         try:
             old_expose = Expose.objects.get(expose_link = expose_link)
@@ -78,32 +89,12 @@ class Expose(models.Model):
             pass
         
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
-        address = None
-        contact = None
         
-        address_dict = parser.address
-        if len(address_dict) > 0:
-            address = Address(**address_dict)
-            try:
-                address.save()
-            except IntegrityError, e:
-                if e.args[0] != 1062:
-                    raise e
-                address = Address.objects.get(**parser.address)
-        contact_dict = parser.contact        
-        if len(contact_dict) > 0:
-            contact = Contact(**contact_dict)
-            try:
-                contact.save()
-            except IntegrityError, e:
-                if e.args[0] != 1062:
-                    raise e
-                contact = Contact.objects.get(**parser.contact)
         e = Expose(
                 title = parser.title,
                 expose_link = expose_link,
-                address = address,
-                contact = contact,
+                address = Expose._get_reference(Address, **parser.address),
+                contact = Expose._get_reference(Contact, **parser.contact),
                 cold_rent = parser.cold_rent,
                 additional_charges = parser.additional_charges,
                 operation_expenses = parser.operation_expenses,
