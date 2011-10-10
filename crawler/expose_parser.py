@@ -272,10 +272,27 @@ class ImmonetExposeParser(ExposeParser):
                 self._evaluate_table_value('Nebenkosten')
             )
     
+    def _is_operation_expenses_in_additional_expenses(self):
+        return False
+    
     def _get_operation_expenses(self):
         return ImmoweltExposeParser._get_float(
                 self._evaluate_table_value('Betriebskosten')
             )
+    
+    def _is_heating_cost_in_additional_expenses(self):
+        return False
+    
+    def _get_heating_cost(self):
+        return ImmoweltExposeParser._get_float(
+                self._evaluate_table_value('Heizkosten')
+            )
+    
+    def _get_original_total_rent(self):
+        total_rent = self._evaluate_table_value('Miete inkl. NK')
+        if total_rent == None:
+            total_rent = self._evaluate_table_value('Monatsmiete')
+        return _get_float(total_rent)
 
 class ImmoscoutExposeParser(ExposeParser):
     def _is_not_online(self):
