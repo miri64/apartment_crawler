@@ -26,7 +26,6 @@ class Contact(Address):
     fax = models.CharField(max_length=30, default='')
     web = models.CharField(max_length=100, default='')
     mail = models.EmailField(default='')
-    further_information = models.TextField(default='')
     
     class Meta:
         unique_together = (

@@ -286,7 +286,6 @@ class ImmoscoutExposeParser(ExposeParser):
                         elif child.text.lower().find('e-mail') == 0 and \
                                 contact.get('mail') == None:
                             contact['mail'] = child.tail.strip()
-                contact['further_information'] = pyquery('div#is24-content p.is24-pre').text().replace('\r','')
         return contact
     
     def _get_additional_charges(self):
