@@ -88,7 +88,8 @@ class Expose(models.Model):
             pass
         
         parser = expose_parser.ExposeParserFactory().get_expose_parser(expose_link)
-        
+        if parser.expose_not_online:
+            return None
         e = Expose(
                 title = parser.title,
                 expose_link = expose_link,

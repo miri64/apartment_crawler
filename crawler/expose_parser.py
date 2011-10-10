@@ -48,6 +48,7 @@ class AddressParser(object):
 
 class ExposeParser(object):
     abstract_methods = (
+            '_is_not_online',
             '_get_address_string',
             '_get_contact',
             '_get_cold_rent',
@@ -99,6 +100,8 @@ class ExposeParser(object):
                     return lambda *args, **kwargs: None
             if attr == 'title':
                 return self._get_title()
+            elif attr == 'expose_not_online':
+                return self._is_not_online()
             elif attr == 'address':
                 return self._get_address()
             elif attr == 'district':
@@ -202,6 +205,9 @@ class ImmonetExposeParser(ExposeParser):
                 return tostring(value).strip()
         return None
     
+    def _is_not_online(self):
+        return self._get_title() == 'Objekt nicht gefunden'
+    
     def _get_cold_rent(self):
         return ImmonetExposeParser._get_float(
                 self._evaluate_table_value('Miete zzgl. NK')
@@ -218,6 +224,9 @@ class ImmonetExposeParser(ExposeParser):
             )
 
 class ImmoscoutExposeParser(ExposeParser):
+    def _is_not_online(self):
+        return self._get_title() == 'Objekt nicht gefunden'
+    
     def _get_cold_rent(self):
         return ImmoscoutExposeParser._get_float(
                 self.pyquery("strong.is24qa-kaltmiete").text()
