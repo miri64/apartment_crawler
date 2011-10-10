@@ -208,6 +208,17 @@ class ImmonetExposeParser(ExposeParser):
     def _is_not_online(self):
         return self._get_title() == 'Objekt nicht gefunden'
     
+    def _get_address_string(self):
+        address = self.pyquery('div#objektAdresse div.boxContPad')
+        address.remove('a')
+        address = address.html()
+        if address != None:
+            address = re.sub(',*\s*<br\s*/*>\s*',', ',address)
+            address = address.strip()
+            address = address.strip(',')
+            return address
+        return ''
+    
     def _get_contact(self):
         realtor_box = self.pyquery("div#anbieter div.boxContPad").html()
         if realtor_box == None:
