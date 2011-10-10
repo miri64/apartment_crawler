@@ -292,7 +292,7 @@ class ImmonetExposeParser(ExposeParser):
         total_rent = self._evaluate_table_value('Miete inkl. NK')
         if total_rent == None:
             total_rent = self._evaluate_table_value('Monatsmiete')
-        return _get_float(total_rent)
+        return self._get_float(total_rent)
 
 class ImmoscoutExposeParser(ExposeParser):
     def _is_not_online(self):
